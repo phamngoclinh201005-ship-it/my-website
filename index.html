@@ -1,117 +1,168 @@
 <!DOCTYPE html>
+<html>
 
 <head>
     <meta charset="utf-8">
     <title>English Picture Game</title>
+
     <style>
         body {
             text-align: center;
-            font-family: Arial;
+            font-family: Arial, sans-serif;
             margin-top: 50px;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            color: #333;
         }
 
         img {
             width: 300px;
             height: 300px;
             object-fit: cover;
+            border-radius: 10px;
+            border: 3px solid #333;
         }
 
         input {
             padding: 10px;
             font-size: 18px;
+            width: 250px;
         }
 
         button {
             padding: 10px 20px;
             font-size: 18px;
             font-weight: bold;
+            cursor: pointer;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        #progress {
+            margin-bottom: 20px;
+            font-size: 20px;
         }
     </style>
 </head>
 
 <body>
-    <div>
-        <h1>Guess the English Word</h1>
-        <img id="picture" src="apple.jpg">
-        <br><br>
-        <input type="text" id="answer" placeholder="Enter English word">
-        <button onclick="checkAnswer()">Submit</button>
-        <div id="message">
-        </div>
-        <script>
-            const questions = [
-                {
-                    image: "apple.jpg",
-                    answer: "apple"
-                },
-                {
-                    image: "cat.jpg",
-                    answer: "cat"
-                },
-                {
-                    image: "dog.jpg",
-                    answer: "dog"
-                },
-                {
-                    image: "viper.jpg",
-                    answer: "viper"
-                },
-                {
-                    image: "Mai.jpg",
-                    answer: "Mai"
-                }
-            ];
 
-            let current = 0;
+    <h1>Guess the English Word</h1>
 
-            function checkAnswer() {
+    <div id="progress"></div>
 
-                const userAnswer =
-                    document.getElementById("answer")
-                        .value
-                        .toLowerCase()
-                        .trim();
+    <img id="picture" src="apple.jpg">
 
-                if (userAnswer === questions[current].answer) {
+    <br><br>
 
-                    document.getElementById("message").innerHTML =
-                        "✅ Correct!";
+    <input type="text" id="answer" placeholder="Enter English word">
 
-                    current++;
+    <button onclick="checkAnswer()">Submit</button>
 
-                    if (current < questions.length) {
+    <div id="message"></div>
 
-                        setTimeout(() => {
+    <script>
 
-                            document.getElementById("picture").src =
-                                questions[current].image;
+        const questions = [
+            {
+                image: "apple.jpg",
+                answer: "apple"
+            },
+            {
+                image: "cat.jpg",
+                answer: "cat"
+            },
+            {
+                image: "dog.jpg",
+                answer: "dog"
+            },
+            {
+                image: "viper.jpg",
+                answer: "viper"
+            },
+            {
+                image: "Mai.jpg",
+                answer: "mai"
+            }
+        ];
 
-                            document.getElementById("answer").addEventListener("keypress", function (event) {
-                                if (event.key === "Enter") {
-                                    checkAnswer();
-                                }
-                            });
+        let current = 0;
 
-                            document.getElementById("message").innerHTML = "";
+        updateProgress();
 
-                        }, 1000);
+        function updateProgress() {
+            document.getElementById("progress").innerHTML =
+                "Question " +
+                (current + 1) +
+                " / " +
+                questions.length;
+        }
 
-                    } else {
+        function checkAnswer() {
 
-                        document.getElementById("message").innerHTML =
-                            "🎉 You Win!";
-                    }
+            const userAnswer =
+                document.getElementById("answer")
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+            if (userAnswer === questions[current].answer) {
+
+                document.getElementById("message").innerHTML =
+                    "✅ Correct!";
+
+                current++;
+
+                if (current < questions.length) {
+
+                    setTimeout(() => {
+
+                        document.getElementById("picture").src =
+                            questions[current].image;
+
+                        document.getElementById("answer").value = "";
+
+                        document.getElementById("message").innerHTML = "";
+
+                        updateProgress();
+
+                    }, 1000);
 
                 } else {
 
                     document.getElementById("message").innerHTML =
-                        "❌ Try Again!";
+                        "🎉 You Win!";
+
                     document.getElementById("answer").value = "";
                 }
+
+            } else {
+
+                document.getElementById("message").innerHTML =
+                    "❌ Try Again!";
+
+                document.getElementById("answer").value = "";
             }
-        </script>
-    </div>
+        }
+
+        document.getElementById("answer")
+            .addEventListener("keypress", function (event) {
+
+                if (event.key === "Enter") {
+                    checkAnswer();
+                }
+
+            });
+
+    </script>
 
 </body>
 
 </html>
+```
