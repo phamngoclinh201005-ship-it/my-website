@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>English Picture Game</title>
+
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin-top: 50px;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        img {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 3px solid #333;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 18px;
+            width: 250px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        #progress {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Guess the English Word</h1>
+
+    <div id="progress"></div>
+
+    <img id="picture" src="apple.jpg">
+
+    <br><br>
+
+    <input type="text" id="answer" placeholder="Enter English word">
+
+    <button onclick="checkAnswer()">Submit</button>
+
+    <div id="message"></div>
+
+    <script>
+
+        const questions = [
+            {
+                image: "apple.jpg",
+                answer: "apple"
+            },
+            {
+                image: "cat.jpg",
+                answer: "cat"
+            },
+            {
+                image: "dog.jpg",
+                answer: "dog"
+            },
+            {
+                image: "viper.jpg",
+                answer: "viper"
+            },
+            {
+                image: "Peanut.jpg",
+                answer: "peanut"
+            }
+        ];
+
+        let current = 0;
+
+        updateProgress();
+
+        function updateProgress() {
+            document.getElementById("progress").innerHTML =
+                "Question " +
+                (current + 1) +
+                " / " +
+                questions.length;
+        }
+
+        function checkAnswer() {
+
+            const userAnswer =
+                document.getElementById("answer")
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+            if (userAnswer === questions[current].answer) {
+
+                document.getElementById("message").innerHTML =
+                    "✅ Correct!";
+
+                current++;
+
+                if (current < questions.length) {
+
+                    setTimeout(() => {
+
+                        document.getElementById("picture").src =
+                            questions[current].image;
+
+                        document.getElementById("answer").value = "";
+
+                        document.getElementById("message").innerHTML = "";
+
+                        updateProgress();
+
+                    }, 1000);
+
+                } else {
+
+                    document.body.innerHTML = `
+    <div style="
+        height:100vh;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        background:linear-gradient(to right, #4facfe, #00f2fe);
+        color:white;
+        text-align:center;
+        font-family:Arial;
+    ">
+
+        <h1 style="font-size:60px;">🏆</h1>
+
+        <h1>CONGRATULATIONS!</h1>
+
+        <h2>Bạn thật giỏi! 🌟</h2>
+
+        <p>Bạn đã hoàn thành tất cả các câu hỏi.</p>
+
+        <button
+            onclick="location.reload()"
+            style="
+                padding:15px 30px;
+                font-size:20px;
+                cursor:pointer;
+            ">
+            Chơi lại
+        </button>
+
+    </div>
+`;
+
+                    document.getElementById("answer").value = "";
+                }
+
+            } else {
+
+                document.getElementById("message").innerHTML =
+                    "❌ Try Again!";
+
+                document.getElementById("answer").value = "";
+            }
+        }
+
+        document.getElementById("answer")
+            .addEventListener("keypress", function (event) {
+
+                if (event.key === "Enter") {
+                    checkAnswer();
+                }
+
+            });
+
+    </script>
+
+</body>
+
+</html>
